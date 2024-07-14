@@ -11,6 +11,9 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@nestjs/class-validator": "^0.13.1",
+    "class-transformer": "^0.1.0-beta.10",
+    "dotenv": "^16.4.5",
     "ts-dotenv": "^0.9.1",
     "ts-node": "^10.9.2"
   }

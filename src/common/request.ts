@@ -1,6 +1,7 @@
 import {config as env} from "./config";
 import * as requestSupertest from 'supertest';
-import supertest from "supertest";
+import supertest, {Response} from "supertest";
+import {UserDto} from "../../tests/auth/dto/user.dto";
 
 export const request: any = requestSupertest(env.baseUrl);
 // const test = supertest('')
@@ -23,8 +24,9 @@ export class Request{
     headers:Record<string, string> = {}
 
 
-    public async get(path: string, param: RequestParam | undefined = undefined): Promise<Response>{
+    public async get(path: string, param: RequestParam | undefined = undefined){
         const header = param?.set ? {...param.set, ...this.headers} : this.headers
+
         if(this.auth)
             return await this.request
                 .get(path)
@@ -111,7 +113,7 @@ export class Request{
             .send(param?.body ?? {})
     }
 
-    public async delete(path: string, param: RequestParam | undefined = undefined): Promise<Response>{
+    public async delete(path: string, param: RequestParam | undefined = undefined){
         const header = param?.set ? {...param.set, ...this.headers} : this.headers
         if(this.auth)
             return await this.request
@@ -142,6 +144,12 @@ export class Request{
         this.headers = {...this.headers, ...obj}
     }
 
+    public async authUser(data: UserDto){
+        const tmp = await this.request.post('/v1/auth').send(data)
+        if(tmp.status === 200)
+            this.setBearerToken(tmp.body['access_token'])
+
+    }
 
 }
 export const request2 = new Request()
