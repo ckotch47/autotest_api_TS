@@ -4,8 +4,8 @@ import {request} from "../common/request";
 import {RefreshTokenDto} from "./dto/refresh.token.dto";
 
 class AuthService{
-    public accessToken: string;
-    public refreshToken: string;
+    public accessToken: string | undefined;
+    public refreshToken: string | undefined;
 
     public async postAuth(user: UserDto): Promise<Response>{
         const res = await request
@@ -13,7 +13,7 @@ class AuthService{
             .send(user);
         expect(res.status).toBe(200);
         expect(<AuthInterface>res.body).not.toStrictEqual({});
-
+        expect(res.body).toMatchSnapshot()
         this.saveToken(<AuthInterface>res.body);
         return res;
     }
